@@ -131,7 +131,9 @@ module Danger
         if (previous_violations.empty? && (warnings + errors + messages + markdowns).empty?) || remove_previous_comments
           # Just remove the comment, if there's nothing to say or --remove-previous-comments CLI was set.
           delete_old_comments!(danger_id: danger_id)
-        else
+        end
+
+        if (!(warnings + errors + messages + markdowns).empty?) || !previous_violations.empty?)
           body = generate_comment(warnings: warnings,
                                     errors: errors,
                                   messages: messages,
@@ -140,7 +142,7 @@ module Danger
                                  danger_id: danger_id,
                                   template: "gitlab")
 
-          if editable_comments.empty?
+          if (editable_comments.empty? || should_create_new_comment)
             client.create_merge_request_comment(
               ci_source.repo_slug, ci_source.pull_request_id, body
             )
