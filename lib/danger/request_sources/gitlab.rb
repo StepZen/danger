@@ -133,7 +133,7 @@ module Danger
           delete_old_comments!(danger_id: danger_id)
         end
 
-        if (!(warnings + errors + messages + markdowns).empty?) || !previous_violations.empty?)
+        if (!(warnings + errors + messages + markdowns).empty? || !previous_violations.empty?)
           body = generate_comment(warnings: warnings,
                                     errors: errors,
                                   messages: messages,
